@@ -1,5 +1,6 @@
 from lib import *
 from math import *
+from sphere import *
 
 class Raytracer (object):
     def __init__(self, width, height):
@@ -23,7 +24,11 @@ class Raytracer (object):
         writebmp(filename,self.width,self.height, self.framebuffer )
     
     def cast_ray(self,origin,direction):
-        return color(255,0,0)
+        s = Sphere(V3(-3,0,-16),2)
+        if s.ray_intersect(origin,direction):
+            return color(255,0,0)
+        else:
+            return self.clear_color
     
     def render(self):
         fov = int(pi/2)
