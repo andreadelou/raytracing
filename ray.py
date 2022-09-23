@@ -24,11 +24,11 @@ class Raytracer (object):
         writebmp(filename,self.width,self.height, self.framebuffer )
     
     def cast_ray(self,origin,direction):
-        s = Sphere(V3(-3,0,-16),2)
-        if s.ray_intersect(origin,direction):
-            return color(255,0,0)
-        else:
-            return self.clear_color
+        for o in self.scene:
+            if o.ray_intersect(origin,direction):
+                return color(255,0,0)
+            else:
+                return self.clear_color
     
     def render(self):
         fov = int(pi/2)
@@ -47,7 +47,7 @@ class Raytracer (object):
                 
     
         
-r = Raytracer(400,400)
+r = Raytracer(800,800)
 r.point(100,100)
 r.render()
 r.write('r.bmp')
