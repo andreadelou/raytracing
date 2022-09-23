@@ -35,10 +35,10 @@ class Raytracer (object):
                 i=((2* (x*0.5) / self.width ) -1) *ar*tana
                 j=((2* (y*0.5) / self.height ) -1) *ar*tana
                 
-                direction = V3(i,j,-1).norm()
+                direction = norm(V3(i,j,-1))
                 origin = V3(0,0,0)
                 c = self.cast_ray(origin,direction)
-                self.point(y,x,color(200,40,200))
+                self.point(y,x,c)
                 
     
         
