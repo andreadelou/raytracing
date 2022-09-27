@@ -1,13 +1,19 @@
-from writeutilities import *
+import struct
 
+def char(c):
+  return struct.pack('=c', c.encode('ascii'))
+
+def word(w):
+  return struct.pack('=h', w)
+
+def dword(d):
+  return struct.pack('=l', d)
 
 def color(r, g, b):
-    return bytes([b, g, r])
-
-
-def color_unit(r, g, b):
-    return color(clamping(r*255), clamping(g*255), clamping(b*255))
-
+    return bytes([int(b*255),
+                    int(g*255),
+                    int(r*255)])
+    
 
 def clamping(num):
     return int(max(min(num, 255), 0))
@@ -16,31 +22,17 @@ def clamping(num):
 BLACK = color(0, 0, 0)
 WHITE = color(255, 255, 255)
 
-""" 
-class Render(object):
-    def __repr__(self):
-        return "render %s x %s " % (self.width, self.height)
-    def __init__(self, width, height):
-        self.width = width
-        self.height = height
-        self.current_color = WHITE
-        self.clear_color = BLACK
-        self.texture = None
-        self.clear() """
+
+def Clear(self):
+  self.framebuffer = [
+    [color(0,0,0) for x in range(self.width)] 
+    for y in range(self.height)
+  ]
 
 
-def clear(self):
-    self.framebuffer = [
-        [self.clear_color for x in range(self.width)]
-        for y in range(self.height)
-    ]
-
-
-def set_clear_color(self, r, g, b):
-    adjusted_r = self.clamping(r * 255)
-    adjusted_g = self.clamping(g * 255)
-    adjusted_b = self.clamping(b * 255)
-    self.clear_color = color(adjusted_r, adjusted_g, adjusted_b)
+def ClearColor(self, r, g, b):
+    self.clearColor = color(r, b, g)
+    self.Clear()
 
 
 def writebmp(filename, width, height, framebuffer):
