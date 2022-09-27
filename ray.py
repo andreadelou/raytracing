@@ -43,7 +43,6 @@ class Raytracer(object):
                     V3(0, 0, 0), direction, color_actual)
 
     def cast_ray(self, origin, direction, color_actual):
-        # la magia pasa
         for esfera in self.scene:
             intersect = esfera[0].ray_intersect(origin, direction)
             if intersect:
