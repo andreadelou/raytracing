@@ -56,12 +56,21 @@ r = Raytracer(400, 400)
 r.clear()
 r.scene = [
     #arriba/abajo iz/de cercano a la camara
+    [Sphere(V3(3, 1, -20), 0.2), color(0, 0, 0)],
+    [Sphere(V3(2.5, 0.5, -20), 0.2), color(0, 0, 0)],
+    [Sphere(V3(2.5, 0, -20), 0.2), color(0, 0, 0)],
+    [Sphere(V3(1, 0, -20), 0.4), color(0, 0, 0)],
+    [Sphere(V3(-1.5, 0, -20), 0.4), color(0, 0, 0)],
+    [Sphere(V3(-4, 0, -20), 0.4), color(0, 0, 0)],
+    [Sphere(V3(-7, 0, -20), 0.4), color(0, 0, 0)],
+    [Sphere(V3(-10, 0, -20), 0.4), color(0, 0, 0)],
     [Sphere(V3(5, 1, -20), 0.4), color(0, 0, 0)],
     [Sphere(V3(5, -1, -20), 0.4), color(0, 0, 0)],
     [Sphere(V3(4, 0, -20), 0.4), color(237, 137, 30)],
     [Sphere(V3(1, 0, -5), 0.7), color(255, 255, 255)],
     [Sphere(V3(-0.4, 0, -5), 0.9), color(255, 255, 255)],
     [Sphere(V3(-1.5, 0, -4), 0.9), color(255, 255, 255)],
+   
     
 ]
 r.render()
