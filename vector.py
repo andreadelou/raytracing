@@ -23,7 +23,7 @@ class V3(object):
 
     # multiplicacion
     def __mul__(self, other):
-        # se verifica si es un escalar
+        # si es escalar
         if (type(other) == int or type(other) == float):
             return V3(
                 self.x * other,
