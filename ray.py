@@ -1,53 +1,68 @@
 from lib import *
 from math import *
-from sphere import *
+from vector import V3
+from sphere import Sphere
 
-class Raytracer (object):
+
+
+class Raytracer(object):
     def __init__(self, width, height):
         self.width = width
         self.height = height
-        self.clear_color = color(0,0,0)
-        self.current_color = color(255,255,255)
+        self.framebuffer = []
+        self.background_color = color(134, 157, 202 )
+        self.current_color = color(255, 255, 255)
         self.clear()
-        
+        self.scene = []
+
     def clear(self):
         self.framebuffer = [
-        [self.clear_color for x in range (self.width)]
-        for y in range(self.height)
+            [self.background_color for x in range(self.width)]
+            for y in range(self.height)
         ]
-    
-    def point(self,x,y,c=None):
-        if y >= 0 and y < self.height and x>=0 and x<self.width:
+
+    def point(self, x, y, c=None):
+        if y >= 0 and self.height and x >= 0 and x < self.width:
             self.framebuffer[y][x] = c or self.current_color
-            
+
     def write(self, filename):
-        writebmp(filename,self.width,self.height, self.framebuffer )
-    
-    def cast_ray(self,origin,direction):
-        for o in self.scene:
-            if o.ray_intersect(origin,direction):
-                return color(255,0,0)
-            else:
-                return self.clear_color
-    
+        writebmp(filename, self.width, self.height, self.framebuffer)
+
     def render(self):
         fov = int(pi/2)
         ar = self.width/self.height
         tana = tan(fov/2)
-        
+
         for y in range(self.height):
             for x in range(self.width):
-                i=((2* (x*0.5) / self.width ) -1) *ar*tana
-                j=((2* (y*0.5) / self.height ) -1) *ar*tana
-                
-                direction = norm(V3(i,j,-1))
-                origin = V3(0,0,0)
-                c = self.cast_ray(origin,direction)
-                self.point(y,x,c)
-                
+                color_actual = self.framebuffer[y][x]
+                i = (2*(x + 0.5)/self.width - 1) * ar * tana
+                j = -(2*(y + 0.5)/self.height - 1) * tana
+                direction = V3(i, j, -1).norm()
+                self.framebuffer[y][x] = self.cast_ray(
+                    V3(0, 0, 0), direction, color_actual)
+
+    def cast_ray(self, origin, direction, color_actual):
+        # la magia pasa
+        for esfera in self.scene:
+            intersect = esfera[0].ray_intersect(origin, direction)
+            if intersect:
+                return esfera[1]
+
+        return color_actual
     
-        
-r = Raytracer(800,800)
-r.point(100,100)
+
+r = Raytracer(400, 400)
+r.clear()
+r.scene = [
+    #arriba/abajo iz/de cercano a la camara
+    [Sphere(V3(5, 1, -20), 0.4), color(0, 0, 0)],
+    [Sphere(V3(5, -1, -20), 0.4), color(0, 0, 0)],
+    [Sphere(V3(4, 0, -20), 0.4), color(237, 137, 30)],
+    [Sphere(V3(1, 0, -5), 0.7), color(255, 255, 255)],
+    [Sphere(V3(-0.4, 0, -5), 0.9), color(255, 255, 255)],
+    [Sphere(V3(-1.5, 0, -4), 0.9), color(255, 255, 255)],
+    
+]
 r.render()
-r.write('r.bmp')
+r.write('rt1.bmp')

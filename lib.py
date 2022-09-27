@@ -10,29 +10,32 @@ def dword(d):
   return struct.pack('=l', d)
 
 def color(r, g, b):
-    return bytes([int(b*255),
-                    int(g*255),
-                    int(r*255)])
-    
+    return bytes([b, g, r])
 
+
+def color_unit(r, g, b):
+  return color(clamping(r*255), clamping(g*255), clamping(b*255))
+  
 def clamping(num):
-    return int(max(min(num, 255), 0))
-
-
+  return int(max(min(num, 255), 0))
+  
 BLACK = color(0, 0, 0)
 WHITE = color(255, 255, 255)
 
 
-def Clear(self):
-  self.framebuffer = [
-    [color(0,0,0) for x in range(self.width)] 
-    for y in range(self.height)
-  ]
+
+def clear(self):
+    self.framebuffer = [
+        [self.clear_color for x in range(self.width)]
+        for y in range(self.height)
+    ]
 
 
-def ClearColor(self, r, g, b):
-    self.clearColor = color(r, b, g)
-    self.Clear()
+def set_clear_color(self, r, g, b):
+    adjusted_r = self.clamping(r * 255)
+    adjusted_g = self.clamping(g * 255)
+    adjusted_b = self.clamping(b * 255)
+    self.clear_color = color(adjusted_r, adjusted_g, adjusted_b)
 
 
 def writebmp(filename, width, height, framebuffer):
@@ -89,12 +92,15 @@ def line(self, v1, v2):
     dx = abs(x1 - x0)
     dy = abs(y1 - y0)
 
+    # Si es empinado, poco movimiento en x y mucho en y.
     steep = dy > dx
 
+    # Se invierte si es empinado
     if steep:
         x0, y0 = y0, x0
         x1, y1 = y1, x1
 
+    # Si la linea tiene direccion contraria, invertir
     if x0 > x1:
         x0, x1 = x1, x0
         y0, y1 = y1, y0
